@@ -1,0 +1,1 @@
+dotnet-aspnet-codegenerator controller -name ShiftWorkController -api -m Domain.Models.RolTurno -dc HISCOMContext -outDir Controllers -namespace Admin.Controllers -b ./Templates -f

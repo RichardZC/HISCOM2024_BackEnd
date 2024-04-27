@@ -1,0 +1,1 @@
+docker run -d --name elasticsearch -e 'ELASTIC_PASSWORD=_fIq}Q#1' --net elastic -v elasticsearch_data:/usr/share/elasticsearch/data --restart always --memory=3072m -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -d elasticsearch:7.12.1

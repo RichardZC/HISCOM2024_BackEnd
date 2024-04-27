@@ -1,0 +1,33 @@
+USE HISCOM
+select [NacionalidadId]
+FROM rh.Empleado
+where [NacionalidadId] is null
+
+UPDATE rh.Empleado
+SET [NacionalidadId] = NULL
+WHERE [TipoDocumentoId] = 2
+
+
+INSERT INTO HISCOM.seguridad.Usuario(EmpleadoId, NombreUsuario, Correo,
+                               Contrasena, FechaReg, Estado)
+SELECT Id,CONCAT(iif(charindex(' ',Nombres)=0,Nombres,left(Nombres,charindex(' ',Nombres)-1)),'.',REPLACE(ApellidoPaterno,' ','')),
+       CONCAT(iif(charindex(' ',Nombres)=0,Nombres,left(Nombres,charindex(' ',Nombres)-1)),'.',REPLACE(ApellidoPaterno,' ',''),'@HRAYACUCHO.GOB.PE')
+       ,N'F+j2tNVijf/W8qR3V1caQCwrpNqkSm1F|GX663a2uIo1niwldf2nM29C8B+a6+qp2',getdate(),1
+FROM rh.Empleado
+
+
+SELECT CONCAT(iif(charindex(' ',Nombres)=0,Nombres,left(Nombres,charindex(' ',Nombres)-1)),'.',REPLACE(ApellidoPaterno,' ','')) FROM rh.Empleado
+
+
+SELECT REPLACE(ApellidoPaterno,' ','') FROM rh.Empleado
+WHERE CHARINDEX(' ',ApellidoPaterno)>0
+
+
+select Id FROM seguridad.Usuario
+WHERE NombreUsuario = 'RICHARD.ZAPATA'
+
+DBCC CHECKIDENT ('[seguridad].Usuario', RESEED, 0)
+
+
+SELECT Id FROM rh.Empleado
+ORDER BY Id DESC

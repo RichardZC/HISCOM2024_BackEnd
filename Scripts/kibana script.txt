@@ -1,0 +1,1 @@
+docker run -d --name kibana --net elastic -p 5601:5601 --restart always -v kibana_data:/usr/share/kibana/data -e "ELASTICSEARCH_HOSTS=http://172.18.0.2:9200" -e "ELASTICSEARCH_PASSWORD=_fIq}Q#1" kibana:7.12.1

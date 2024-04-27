@@ -1,0 +1,75 @@
+USE HISCOM
+
+GO
+
+select [ID Tipo Documento] 'TipoDocId', [Número de Documento] 'NumeroDoc',
+[Apellido Paterno] 'ApellidoPaterno', [Apellido Materno] 'ApellidoMaterno', Nombres 'Nombres',
+SUBSTRING(Sexo,1,1) 'Sexo',[Fecha Nacimiento] 'Nacimiento', [ID Estado Civil] 'EstadoCivilId',
+Direcciones 'Direccion',Correos 'CorreoPersonal', Telefonos, [ID Profesión] 'ProfesionId',
+[N° de Colegio Profesional] 'NumeroColegio', [ID Cargo] 'CargoId', [Régimen Laboral] 'RegimenLaboral',
+[Condición Laboral] 'CondicionLaboral', [Fecha de Nombramiento] 'FechaNombramiento', [Fecha Ingreso Inicio Labores] 'FechaIngreso',
+[ID Banco] 'BancoId', [ID Tipo de Cuenta], [Número de Cuenta] 'NumeroCuenta', [Código de Cuente Interbancario(CCI)] 'CuentaInterbancaria',
+[ID Descripción Régimen Pensionario] 'RegimenPensionairioId', [Fecha de Ingreso Régimen Pensionario] 'FechaRegimenPensionario', CUSPP
+
+from reporte_padron_nominal
+where [Estado Registro] in ('Activo','CAS SIN PLAZA')
+
+select * from reporte_padron_nominal
+
+
+USE INTRA
+GO
+SELECT IIF([Fecha de Nombramiento]=NULL,NULL,IIF(substring([Fecha de Nombramiento],3,1)='/', CONVERT(DATE,[Fecha de Nombramiento],103), CONVERT(DATE,[Fecha de Nombramiento],23)))
+FROM reporte_padron_nominal
+
+USE INTRA
+GO
+SELECT IIF([Fecha Ingreso Inicio Labores]=NULL,NULL,IIF(substring([Fecha Ingreso Inicio Labores],3,1)='/', CONVERT(DATE,[Fecha Ingreso Inicio Labores],103), CONVERT(DATE,[Fecha Ingreso Inicio Labores],23)))
+FROM reporte_padron_nominal
+
+
+USE INTRA
+GO
+SELECT IIF([Fecha Nacimiento]=NULL,NULL,IIF(substring([Fecha Nacimiento],3,1)='/', CONVERT(DATE,[Fecha Nacimiento],103), CONVERT(DATE,[Fecha Nacimiento],23)))
+FROM reporte_padron_nominal
+
+SELECT  [Apellido Paterno], [Nombres] FROM reporte_padron_nominal
+
+USE INTRA
+GO
+INSERT INTO HISCOM.rh.Empleado(TipoDocumentoId, CargoId, CondicionLaboralId,
+                               ProfesionId, RegimenLaboralId, NacionalidadId, BancoId, TipoCuentaId, ApellidoPaterno,
+                               ApellidoMaterno, Nombres, Nacimiento, Sexo, FechaIngreso, NumeroColegiatura, Correos, NumeroDoc,
+                               EstadoCivil, Direccion, NumeroCuenta, CuentaInterbancaria, Telefonos, EsJefe, FechaReg, Estado, FechaNombramiento)
+SELECT IIF([ID Tipo Documento] IS NULL,NULL,CONVERT(int,[ID Tipo Documento])), [Id Cargo], [ID Condición Laboral],
+       [ID Profesión],IIF([ID Régimen Laboral] IS NULL,NULL,CONVERT(int,[ID Régimen Laboral])),1,IIF([ID Banco] IS NULL,NULL,CONVERT(int,[ID Banco])),
+       IIF([ID Tipo de Cuenta] IS NULL,NULL,CONVERT(int,[ID Tipo de Cuenta])), [Apellido Paterno], [Apellido Materno], [Nombres],
+       IIF([Fecha Nacimiento]=NULL,NULL,IIF(substring([Fecha Nacimiento],3,1)='/', TRY_CONVERT(DATE,[Fecha Nacimiento],103), TRY_CONVERT(DATE,[Fecha Nacimiento],23))),
+       IIF([ID Sexo]=0,'F','M'),
+       IIF([Fecha Ingreso Inicio Labores]=NULL,NULL,IIF(substring([Fecha Ingreso Inicio Labores],3,1)='/', TRY_CONVERT(DATE,[Fecha Ingreso Inicio Labores],103), TRY_CONVERT(DATE,[Fecha Ingreso Inicio Labores],23))),
+       [N° de Colegio Profesional],[Correos],[Número de Documento],IIF([ID Estado Civil] IS NULL,NULL,CONVERT(int,[ID Estado Civil])),
+       [Direcciones], [Número de Cuenta], [Código de Cuente Interbancario(CCI)], [Telefonos], 0,GETDATE(),1,
+       IIF([Fecha de Nombramiento]=NULL,NULL,IIF(substring([Fecha de Nombramiento],3,1)='/', TRY_CONVERT(DATE,[Fecha de Nombramiento],103), TRY_CONVERT(DATE,[Fecha de Nombramiento],23)))
+       FROM reporte_padron_nominal
+where [Estado Registro] in ('Activo','CAS SIN PLAZA')
+
+
+SELECT IIF([ID Estado Civil] IS NULL,NULL,CONVERT(int,[ID Estado Civil])) FROM reporte_padron_nominal
+select IIF([ID Tipo Documento] IS NULL,NULL,CONVERT(int,[ID Tipo Documento])) from reporte_padron_nominal
+
+SELECT IIF([ID Sexo]=0,'F','M') FROM reporte_padron_nominal
+where [ID Tipo Documento] IS NULL
+
+SELECT [ID Condición Laboral] FROM reporte_padron_nominal
+
+ALTER TABLE HISCOM.rh.Empleado
+ALTER COLUMN CondicionLaboralId VARCHAR(8) null
+
+
+delete from HISCOM.rh.Empleado
+WHERE 1=1
+
+select count(Id) FROM HISCOM.rh.Empleado
+
+
+select count(INTRA.dbo.reporte_padron_nominal.[Número de Documento]) FROM reporte_padron_nominal

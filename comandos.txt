@@ -1,0 +1,34 @@
+-- crear el contenedor
+docker run -d -v D:\temp\hiscom\appsettings.json:/app/appsettings.json --name hiscom-backend -p 80:80 rzapatac/admin
+-- ingresar a promt del contenedor
+docker exec -it 6f /bin/sh
+
+
+
+
+--Server Cache
+docker run -d --name elasticsearch -e 'ELASTIC_PASSWORD=_fIq}Q#1' -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.14.0
+
+docker network create elastic
+docker run -d --name elasticsearch -e 'ELASTIC_PASSWORD=_fIq}Q#1' --net elastic -v elasticsearch_data:/usr/share/elasticsearch/data --restart always --memory=3072m -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -d elasticsearch:7.12.1
+docker run -d --name kibana --net elastic -p 5601:5601 --restart always -v kibana_data:/usr/share/kibana/data -e "ELASTICSEARCH_HOSTS=http://elasticsearch:9200" -e "ELASTICSEARCH_PASSWORD=_fIq}Q#1" kibana:7.12.1
+
+--contenedor Back
+docker build -t hiscom-backend:0.1.0 -f Dockerfile .
+
+docker run --name hiscom-backend -d -v D:\Code\CSharp\HISCOM-Backend\Admin\appsettings.Docker.json:/Hiscom/appsettings.json -v D:\Shared:/Shared -p 51302:80 hiscom-backend:1.0.0
+docker run --name hiscom-backend -d -v G:\GITHUB\HISCOM\HISCOM-Backend\Admin\appsettings.Docker.json:/Hiscom/appsettings.json -v D:\Shared:/Shared -p 51302:80 hiscom-backend:0.1
+
+docker run --name hiscom-backend -d -v /Shared:/Shared -p 80:80 rzapatac/hiscom-backend:0.1.4
+docker run --name hiscom-backend -d -v /Shared:/Shared -p 51302:80 rzapatac/hiscom-backend:0.1.4
+
+
+--contenedor Front
+docker build -t hiscom-frontend:0.2.1 -f Dockerfile .
+docker run -d -p 3000:3000 --name hiscom-frontend hiscom-frontend:0.2.1
+
+-- publicar en docker hub
+docker tag hiscom-frontend:0.2.1 rzapatac/hiscom-frontend:0.2.1
+docker push rzapatac/hiscom-frontend:0.2.1
+
+docker run -d -p 80:3000 --name hiscom-frontend rzapatac/hiscom-frontend:0.2.0

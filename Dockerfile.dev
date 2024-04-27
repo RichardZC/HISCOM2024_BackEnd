@@ -1,0 +1,14 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:5.0
+COPY . src/
+WORKDIR /src
+RUN rm Admin/appsettings.json
+RUN mv Admin/appsettings.Docker.json Admin/appsettings.json
+RUN dotnet restore
+RUN dotnet clean
+RUN dotnet build -c Release
+RUN dotnet publish -c Release
+
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
+COPY --from=0 /src/Admin/bin/Release/net5.0/publish/ Hiscom/
+WORKDIR /Hiscom
+ENTRYPOINT ["dotnet", "Admin.dll"]

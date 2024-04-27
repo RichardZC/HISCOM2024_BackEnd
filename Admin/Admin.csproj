@@ -1,0 +1,117 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Admin</RootNamespace>
+    <UserSecretsId>6d45d35f-9a37-43a8-a7ec-a565c53cb2bb</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.13.1" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="5.3.7" />
+    <PackageReference Include="Handlebars.Net" Version="2.0.9" />
+    <PackageReference Include="Hashids.net" Version="1.4.1" />
+    <PackageReference Include="itext7.pdfhtml" Version="3.0.5" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="NaCl.Net" Version="0.1.13" />
+    <PackageReference Include="NEST" Version="7.14.1" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="21.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TemplateFiles Include="$(ProjectDir)\Templates\*.hbs" />
+    <TemplateImages Include="$(ProjectDir)\Templates\*.jpg" />
+  </ItemGroup>
+  
+  <Target Name="CopyTemplates" AfterTargets="AfterBuild">
+    <Copy SourceFiles="@(TemplateFiles)" DestinationFolder="$(OutDir)\Templates" />
+    <Copy SourceFiles="@(TemplateImages)" DestinationFolder="$(OutDir)\Templates" />
+  </Target>
+  
+  <ItemGroup>
+    <None Remove="Templates\ControllerGenerator\**" />
+    <None Remove="wwwroot\shift-work\**" />
+    <Content Remove="Templates\ControllerGenerator\**" />
+    <Content Remove="wwwroot\shift-work\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Templates\ControllerGenerator\**" />
+    <Compile Remove="wwwroot\shift-work\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Templates\ControllerGenerator\**" />
+    <EmbeddedResource Remove="wwwroot\shift-work\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Reportes\rptCita.rdlc" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <TemplateFiles Remove="Templates\Payroll.hbs" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\ApiControllerWithActions.cshtml" />
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\ApiControllerWithContext.cshtml" />
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\ApiEmptyController.cshtml" />
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\ControllerWithActions.cshtml" />
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\EmptyController.cshtml" />
+    <_ContentIncludedByDefault Remove="Templates\ControllerGenerator\MvcControllerWithContext.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\Reportes\rptCita.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\shiftWork.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Update="Templates\payroll.hbs">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

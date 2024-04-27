@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Boleta de pago</title>
+</head>
+
+<body>
+  <aside class="aside-left">
+    DIRECCIÓN DE PERSONAL
+  </aside>
+
+  <header>
+    <img class="logo" src="https://hrayacucho.gob.pe/images/logo.png" alt="Logo HRA" />
+    <div class="title">
+      HOSPITAL REGIONAL "MIGUEL ÁNGEL MARISCAL LLERENA" DE AYACUCHO
+      <br/>
+      <b>BOLETA DE PAGO - {{Month}} {{Year}}</b>
+    </div>
+    <img class="qr" src="{{ QrCode }}" alt="Código QR" />
+  </header>
+
+  <div class="container">
+    <table class="monospace fixed">
+      <tr>
+        <td>
+          <div><b>{{FullName}}</b></div>
+          <div>OCUP: {{Occupation}}</div>
+          <div>C.E.:</div>
+          <div>COND: {{LaboralCondition}}</div>
+          <div>U.ORGA: HOSP. G.B. AYACUCHO</div>
+          <div>U.EJEC: 444-401 REGION AYACUCHO - HOSP</div>
+        </td>
+        <td class="text-right">
+          <div><b>RUC: {{RUCHRA}}</b></div>
+          <div>NIV: 00&nbsp;&nbsp;FP: <b>{{Month}} {{Year}}</b>&nbsp;&nbsp;N: 1-0420A</div>
+          <div>PLZ: {{Vacancy}}&nbsp;&nbsp;AFP: {{AfpCard}}-{{AfpDate}}</div>
+          <div>DNI: <b>{{DNI}}</b>&nbsp;&nbsp;FN: <b>{{BirthDate}}</b></div>
+          <div>C. ESSA.: &nbsp;&nbsp;MS: 1024-0126&nbsp;&nbsp;FI: 19-10-15</div>
+          <div>LP: 0&nbsp;&nbsp;LS: 0&nbsp;&nbsp;HU: 0</div>
+        </td>
+      </tr>
+    </table>
+
+    <table class="data fixed monospace">
+      <tr>
+        <td>
+          <div>
+            <b>INGRESOS</b>
+          </div>
+          <table>
+            {{#each Income}}
+            <tr>
+              <td>{{Key}}</td>
+              <td>{{Value}}</td>
+            </tr>
+            {{/each}}
+          </table>
+        </td>
+        <td>
+          <div>
+            <b>DESCUENTOS</b>
+          </div>
+          <table>
+            {{#each Expenses}}
+            <tr>
+              <td>{{Key}}</td>
+              <td>{{Value}}</td>
+            </tr>
+            {{/each}}
+          </table>
+        </td>
+        <td>
+          <div>
+            <b>APORTES</b>
+          </div>
+          <table>
+            {{#each Contributions}}
+            <tr>
+              <td>{{Key}}</td>
+              <td>{{Value}}</td>
+            </tr>
+            {{/each}}
+          </table>
+        </td>
+      </tr>
+      <tr class="total-row">
+        <td>
+          <table>
+            <tr>
+              <td><b>INGRESOS</b></td>
+              <td>{{TotalIncome}}</td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td><b>EGRESOS</b></td>
+              <td>-{{TotalExpenses}}</td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td><b>LÍQUIDO</b></td>
+              <td>{{Liquid}}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <aside class="aside-right">
+    ÁREA DE REMUNERACIONES Y PLANILLAS
+  </aside>
+
+  <footer>
+    <p>Esta constancia puede ser verificada en el sitio web del Hospital Regional de Ayacucho Miguel Ángel Mariscal Llerena&nbsp;<a href="{{SearchUrl}}">{{SearchUrl}}</a>,
+      con el código <b>{{FileName}}</b> o utilizando lectora de códigos o teléfono celular enfocado al código QR. El celular debe poseer un software 
+      gratuito descargado desde internet.
+    </p>
+  </footer>
+</body>
+
+<style>
+body {
+  width: 100%;
+}
+
+header {
+  margin-bottom: 16px;
+  position: relative;
+  height: 60px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0;
+  border: 0px solid transparent;
+  background-clip: padding-box;
+  vertical-align: top;
+}
+
+aside {
+  white-space: nowrap;
+  position: absolute;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 14px;
+}
+
+p {
+  text-align: center;
+  padding: 0 64px;
+}
+
+header > .logo {
+  position: absolute;
+  left: 0;
+  height: 60px;
+  width: auto;
+}
+
+header > .qr {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 60px;
+  width: auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 10px 0;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', serif;
+}
+
+.aside-left {
+  transform-origin: bottom left;
+  transform: rotate(-90deg);
+  top: -45em;
+  left: -65em;
+}
+
+.aside-right {
+  transform-origin: top left;
+  transform: rotate(90deg);
+  top: 69.5em;
+  right: -65em;
+}
+
+.fixed {
+  table-layout: fixed;
+}
+
+.container {
+    padding: 0px 36px;
+    background-image: url(https://i.ibb.co/DbsSptw/background-HRA.png);
+    background-size: 450px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.total-row table {
+  margin-top: 5em;
+}
+
+.data {
+  margin-top: 24px;
+  border: 1px solid black;
+}
+
+.data table td:last-child {
+  text-align: right;
+}
+
+.data > tbody > tr > td:first-child {
+  padding-top: 6px;
+  padding-right: 16px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+}
+
+.data > tbody > tr > td:nth-child(2) {
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding-top: 6px;
+  padding-right: 16px;
+  padding-bottom: 6px;
+  padding-left: 16px;
+}
+
+.data > tbody > tr > td:last-child {
+  padding-top: 6px;
+  padding-right: 6px;
+  padding-bottom: 6px;
+  padding-left: 16px;
+}
+
+.monospace {
+    font-family: 'Courier New', monospace;
+    text-overflow: ellipsis;
+    font-size: 11px;
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.text-right, .text-right > div {
+  text-align: right;
+}
+</style>
+
+</html>

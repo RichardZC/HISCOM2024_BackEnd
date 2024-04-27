@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte Rol Turnos</title>
+</head>
+
+<body>
+    {{#each .}}
+    <div class="container">
+        <div class="title">
+            <img class="logo" src="https://hrayacucho.gob.pe/images/logo.png" alt="Logo HRA" />
+            <span class="establishment">HOSPITAL REGIONAL "MIGUEL ÁNGEL MARISCAL LLERENA" DE AYACUCHO </span>
+            <br>
+            <span class="establishment">PROGRAMACIÓN DE {{Type}}</span>
+            <img class="qr" src="{{ QrCode }}" alt="QR" />
+        </div>
+        <div class="info-container" style="height: {{ HeaderHeight }}px;">
+            <div class="info-table" style="left: 0">
+                <table>
+                    <tbody>
+                        {{#each Levels}}
+                        <tr>
+                            <td class="px-10"> {{Level}} </td>
+                            <td style="text-align: left; padding-left: 10px; padding-right:25px;"> {{Denomination}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="info-table" style="right: 0">
+                <table style="margin-left: auto">
+                    <tbody>
+                        <tr>
+                            <td class="px-10"> Año </td>
+                            <td class="px-10"> {{Year}}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-10"> Mes </td>
+                            <td class="px-10"> {{Month}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <table class="main-table">
+            <thead>
+                <tr>
+                    <th class="header">APELLIDOS Y NOMBRES</th>
+                    <th class="header" style="width: 55px;">CONDICION<br>LABORAL</th>
+                    {{#each Days}}
+                    <th>{{ Day }}<br>{{ Abbr }}</th>
+                    {{/each}}
+                    <th style="width: 35px">HORAS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each Establishments}}
+                <tr style="background-color: #DDD9D9 !important; text-align:center !important;">
+                    <td colspan="100" style="text-align:center !important;"><b>SEDE {{ Denomination }}</b></td>
+                </tr>
+                {{#each Categories}}
+                <tr style="background-color: #DDD9D9 !important; ">
+                    <td colspan="100">{{ Denomination }}</td>
+                </tr>
+                {{#each Employees}}
+                {{#if TotalHours}}
+                <tr>
+                    <td style="white-space: normal !important;">{{ FullName }}</td>
+                    <td>{{ LaboralCondition }}</td>
+                    {{#each Details}}
+                    <td bgcolor="{{ BackgroundColor }}">{{ Abbreviation }}</td>
+                    {{/each}}
+                </tr>
+                {{/if}}
+                {{/each}}
+                {{/each}}
+                {{/each}}
+            </tbody>
+        </table>
+        <div class="footer-container">
+            <div class="footer-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Leyenda</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each Turns}}
+                        <tr>
+                            <td style="min-width: 150px">{{Description}}</td>
+                            <td>{{Denomination}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+            </div>
+            {{#if Approvals}}
+            <div class="footer-table" style="right: 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Aprobado y firmado por:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each Approvals}}
+                        {{#if Header}}
+                        <tr>
+                            <th colspan="2" style="text-align:left !important"><b>{{ Header }}</b></th>
+                        </tr>
+                        {{/if}}
+                        <tr>
+                            <td style="min-width: 425px">{{Approver}}</td>
+                            <td style="min-width: 100px">{{Date}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <footer>
+        <p>Esta constancia puede ser verificada en el sitio web del Hospital Regional de Ayacucho Miguel Ángel Mariscal
+            Llerena&nbsp;<a href="{{SearchUrl}}">{{SearchUrl}}</a>,
+            con el código <b>{{FileName}}</b> o utilizando lectora de códigos o teléfono celular enfocado al código QR. El
+            celular debe poseer un software
+            gratuito descargado desde internet.
+        </p>
+    </footer>
+    {{/each}}
+</body>
+<style>
+    /*@page {
+    @bottom-center{
+        content: element(footer);
+    }
+    margin-bottom: 200px;
+    }
+    footer.rf{
+        position: running(footer);
+    }*/
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    p {
+        text-align: center;
+        padding: 0 64px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: fit-content;
+    }
+
+    th,
+    td {
+        white-space: nowrap;
+        min-width: 18px;
+        text-align: center;
+        border: 1px solid black;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    th {
+        font-weight: 500;
+    }
+
+    .container {
+        width: fit-content;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .info-container {
+        margin-top: 10px;
+        padding: 0;
+        width: 100%;
+        position: relative;
+    }
+
+    .info-table {
+        position: absolute;
+        top: 0;
+        width: 50%;
+    }
+
+    .main-table {
+        margin-top: 15px;
+
+    }
+
+    .info-table tr {
+        background-color: white !important;
+    }
+
+    .info-table td {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .header {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    tbody td:first-child {
+        text-align: left !important;
+    }
+
+    .main-table td:first-child,
+    .main-table th:first-child {
+        width: 145px !important;
+    }
+
+    tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .title {
+        position: relative;
+        text-align: center;
+        height: 30px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .title>.qr {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 60px;
+        width: auto;
+    }
+
+    .title>.logo {
+        position: absolute;
+        left: 0;
+        height: 60px;
+        width: auto;
+    }
+
+    .title>span {
+        line-height: 15px;
+        font-size: 15px;
+    }
+
+    .establishment {
+        font-weight: 500;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+
+    .footer-container {
+        font-size: 0;
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .footer-table {
+        width: 20%;
+        display: inline-block;
+        font-size: 11px;
+        text-align: left;
+    }
+
+    .footer-table>table {
+        margin-right: auto;
+    }
+
+    .signature {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 11px;
+        width: 20%;
+        text-align: center;
+    }
+
+    .px-10 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+</style>
+
+</html>

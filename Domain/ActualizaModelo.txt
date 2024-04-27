@@ -1,0 +1,10 @@
+﻿
+* Correr en Consola de paquetes nuguet en el proyecto dominio
+scaffold-DbContext -Connection Name=connectionDB Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context HISCOMContext -Namespace Domain.Models -f -NoPluralize
+
+
+Power shell
+
+dotnet ef dbcontext scaffold name=connectionDB  Microsoft.EntityFrameworkCore.SqlServer -o ../Domain/Models -c HISCOMContext -n Domain.Models -f --no-pluralize
+
+dentro de la carpeta de admin
